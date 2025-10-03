@@ -9,6 +9,8 @@ import java.util.Map;
 import src.automaton.components.*;
 import src.automaton.core.StackAutomaton;
 
+// TODO: completar verificaciones (epsilon no puede estar en alfabeto)
+
 public class ReadAutomaton {
 
   public static StackAutomaton readFileAutomaton(String fileRoute) throws IOException {

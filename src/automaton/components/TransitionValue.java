@@ -1,16 +1,14 @@
 package src.automaton.components;
 
-import java.util.Stack;
-
 public class TransitionValue {
 
   private final State state;
-  private final Stack<AutomatonSymbol> stackSymbols;
+  private final StackUtil<AutomatonSymbol> stackSymbols;
 
   public TransitionValue(State state, String stackSymbols) {
     this.state = state;
 
-    Stack<AutomatonSymbol> stack = new Stack<AutomatonSymbol>();
+    StackUtil<AutomatonSymbol> stack = new StackUtil<AutomatonSymbol>();
     for (int i = stackSymbols.length() - 1; i >= 0; --i) {
       if (stackSymbols.charAt(i) == '.') continue;
       stack.push(new AutomatonSymbol(stackSymbols.charAt(i)));
@@ -22,7 +20,7 @@ public class TransitionValue {
     return this.state;
   }
 
-  public Stack<AutomatonSymbol> getStackSymbols() {
+  public StackUtil<AutomatonSymbol> getStackSymbols() {
     return this.stackSymbols;
   }
 
