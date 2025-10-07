@@ -1,0 +1,10 @@
+# Automata por vaciado de pila
+# Bucle infinito para probar el funcionamiento del programa
+p q r
+a b c
+S A B b
+p
+S
+p a S p SAB
+p . S p SAB
+p a S q b

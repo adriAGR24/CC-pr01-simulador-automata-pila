@@ -9,9 +9,7 @@ import java.util.Map;
 import src.automaton.components.*;
 import src.automaton.core.StackAutomaton;
 
-// TODO: completar verificaciones (epsilon no puede estar en alfabeto)
-
-public class ReadAutomaton {
+public class ReadStackAutomaton {
 
   public static StackAutomaton readFileAutomaton(String fileRoute) throws IOException {
     BufferedReader br;
@@ -33,25 +31,21 @@ public class ReadAutomaton {
       throw new IllegalArgumentException("no set of states declared in input file");
     }
     StateSet stateSet = new StateSet(line.trim().split("\\s+"));
-    System.out.println(stateSet);
 
     line = checkMandatoryLine("no input alphabet declared in input file", br);
     Alphabet inputAlphabet = new Alphabet(line.trim().split("\\s+"));
-    System.out.println(inputAlphabet);
 
     line = checkMandatoryLine("no stack alphabet declared in input file", br);
     Alphabet stackAlphabet = new Alphabet(line.trim().split("\\s+"));
-    System.out.println(stackAlphabet);
 
     line = checkMandatoryLine("no initial state declared in input file", br);
     State initialState = new State(line.trim());
-    System.out.println(initialState.getStateId());
 
     line = checkMandatoryLine("no initial stack symbol declared in input file", br);
     AutomatonSymbol initialStackSymbol = new AutomatonSymbol(line.trim());
-    System.out.println(initialStackSymbol.getSymbolId());
 
     ArrayList<Transition> transitions = new ArrayList<Transition>();
+    int transitionCounter = 1;
     while ((line = br.readLine()) != null) {
       line = line.trim();
       if (line.length() == 0){
@@ -64,8 +58,7 @@ public class ReadAutomaton {
         throw new IllegalArgumentException("transition with invalid number of elements declared in input file");
       }
       TransitionKey key = new TransitionKey(new State(transitionArray[0]), new AutomatonSymbol(transitionArray[1]), new AutomatonSymbol(transitionArray[2]));
-      TransitionValue value = new TransitionValue(new State(transitionArray[3]), transitionArray[4]);
-      System.out.println(new Transition(key, value));
+      TransitionValue value = new TransitionValue(new State(transitionArray[3]), transitionArray[4], transitionCounter++);
       transitions.add(new Transition(key, value));
     }
     br.close();
@@ -82,6 +75,12 @@ public class ReadAutomaton {
   }
 
   private static StackAutomaton checkValidAutomaton(StateSet stateSet, Alphabet inputAlphabet, Alphabet stackAlphabet, State initialState, AutomatonSymbol initialStackSymbol, ArrayList<Transition> transitions) {
+    if (inputAlphabet.contains(new AutomatonSymbol('.'))) {
+      throw new IllegalArgumentException("input alphabet can not contain epsilon");
+    }
+    if (stackAlphabet.contains(new AutomatonSymbol('.'))) {
+      throw new IllegalArgumentException("stack alphabet can not contain epsilon");
+    }
     if (!stateSet.contains(initialState)) {
       throw new IllegalArgumentException("initial state do not belongs to state set");
     }

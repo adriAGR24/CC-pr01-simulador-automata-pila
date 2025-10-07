@@ -4,9 +4,11 @@ public class TransitionValue {
 
   private final State state;
   private final StackUtil<AutomatonSymbol> stackSymbols;
+  private final int id;
 
-  public TransitionValue(State state, String stackSymbols) {
+  public TransitionValue(State state, String stackSymbols, int id) {
     this.state = state;
+    this.id = id;
 
     StackUtil<AutomatonSymbol> stack = new StackUtil<AutomatonSymbol>();
     for (int i = stackSymbols.length() - 1; i >= 0; --i) {
@@ -24,13 +26,13 @@ public class TransitionValue {
     return this.stackSymbols;
   }
 
+  public int getId() {
+    return id;
+  }
+
   @Override
   public String toString() {
-    String stackSymbolString = "";
-    for (int i = this.stackSymbols.size() - 1; i >= 0; --i) {
-      stackSymbolString += this.stackSymbols.get(i).getSymbolId();
-    }
-    return "(" + state + ", " + stackSymbolString + ")";
+    return "(" + state + ", " + stackSymbols.toString() + ")";
   }
 
 }
