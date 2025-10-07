@@ -2,12 +2,23 @@ package src.automaton.components;
 
 import java.util.Objects;
 
+/**
+ * Key that identifies a transition: current state, input symbol and
+ * the expected symbol at the top of the stack.
+ */
 public class TransitionKey {
 
   private final State state;
   private final AutomatonSymbol inputSymbol;
   private final AutomatonSymbol stackSymbol;
 
+  /**
+   * Constructs a transition key.
+   *
+   * @param state current state
+   * @param inputSymbol input symbol that triggers the transition (or '.' for epsilon)
+   * @param stackSymbol symbol at the top of the stack required for the transition
+   */
   public TransitionKey(State state, AutomatonSymbol inputSymbol, AutomatonSymbol stackSymbol) {
     this.state = state;
     this.inputSymbol = inputSymbol;

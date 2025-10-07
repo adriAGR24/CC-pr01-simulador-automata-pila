@@ -9,8 +9,24 @@ import java.util.Map;
 import src.automaton.components.*;
 import src.automaton.core.StackAutomaton;
 
+/**
+ * Utilities to read a pushdown automaton definition from a text file.
+ *
+ * <p>The file must contain in separate lines: set of states, input alphabet,
+ * stack alphabet, initial state, initial stack symbol and then the
+ * transitions, one per line.</p>
+ */
 public class ReadStackAutomaton {
 
+  /**
+   * Reads an automaton from a file and validates its consistency.
+   *
+   * @param fileRoute path to the definition file
+   * @return an instance of {@link StackAutomaton}
+   * @throws IOException if the file cannot be read
+   * @throws IllegalArgumentException if the file format is invalid or the
+   *         definition is inconsistent
+   */
   public static StackAutomaton readFileAutomaton(String fileRoute) throws IOException {
     BufferedReader br;
     try {
@@ -65,6 +81,10 @@ public class ReadStackAutomaton {
     return checkValidAutomaton(stateSet, inputAlphabet, stackAlphabet, initialState, initialStackSymbol, transitions);
   }
 
+  /**
+   * Reads the next mandatory line from the BufferedReader and throws an
+   * exception with the provided message if it does not exist or is empty.
+   */
   private static String checkMandatoryLine(String errorMessage, BufferedReader br) throws IllegalArgumentException, IOException {
     String line;
     if ((line = br.readLine()) == null || line.trim().length() == 0) {
@@ -74,6 +94,10 @@ public class ReadStackAutomaton {
     return line;
   }
 
+  /**
+   * Validates the coherence of the read automaton and builds the final
+   * instance.
+   */
   private static StackAutomaton checkValidAutomaton(StateSet stateSet, Alphabet inputAlphabet, Alphabet stackAlphabet, State initialState, AutomatonSymbol initialStackSymbol, ArrayList<Transition> transitions) {
     if (inputAlphabet.contains(new AutomatonSymbol('.'))) {
       throw new IllegalArgumentException("input alphabet can not contain epsilon");
@@ -97,6 +121,10 @@ public class ReadStackAutomaton {
     return new StackAutomaton(stateSet, inputAlphabet, stackAlphabet, initialState, initialStackSymbol, transitionMap);
   }
 
+  /**
+   * Validates an individual transition checking that the referenced symbols
+   * and states belong to the declared sets.
+   */
   private static void checkValidTransition(StateSet stateSet, Alphabet inputAlphabet, Alphabet stackAlphabet, Transition transition) {
     TransitionKey key = transition.getKey();
     TransitionValue value = transition.getValue();

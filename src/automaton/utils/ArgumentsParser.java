@@ -2,7 +2,7 @@ package src.automaton.utils;
 
 
 public class ArgumentsParser {
-
+  
   public String automatonFileRoute;
   public String stringsFileRoute;
   public boolean trace = false;
@@ -19,6 +19,12 @@ public class ArgumentsParser {
   + "- -s <strings_file>: The file containing the strings to check.\n"
   + "- [-t]: Trace mode. If not specified: false.";
 
+  /**
+   * Parses command line arguments and populates public fields with the
+   * corresponding values. Exits with help message if -h is provided.
+   *
+   * @param args program arguments
+   */
   public ArgumentsParser(String[] args) {
     for (int i = 0; i < args.length; ++i) {
       String argument = args[i];

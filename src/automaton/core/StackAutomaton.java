@@ -14,8 +14,14 @@ import src.automaton.components.State;
 import src.automaton.components.TransitionKey;
 import src.automaton.components.TransitionValue;
 
-// TODO: alcanzar el límite no debería dar un excepción
-
+/**
+ * Implementation of a pushdown automaton and its depth-first search (DFS)
+ * execution engine.
+ *
+ * <p>It is configured with state sets and alphabets, an initial state,
+ * an initial stack symbol and a transition map. It provides methods to run
+ * the automaton on an input string and to retrieve the execution trace.</p>
+ */
 public class StackAutomaton {
 
   private final StateSet stateSet;
@@ -29,6 +35,16 @@ public class StackAutomaton {
   private final String TRACE_FORMAT = "%-20s %-20s %-20s %-20s";
   private final int MAX_LIMIT = 1000;
 
+  /**
+   * Constructs the automaton with its full definition.
+   *
+   * @param stateSet set of states (Q)
+   * @param inputAlphabet input alphabet (Σ)
+   * @param stackAlphabet stack alphabet (Γ)
+   * @param initialState initial state (s)
+   * @param initialStackSymbol initial stack symbol (Z)
+   * @param transitionMap transition map δ
+   */
   public StackAutomaton(StateSet stateSet, Alphabet inputAlphabet, Alphabet stackAlphabet, State initialState, AutomatonSymbol initialStackSymbol, Map<TransitionKey, List<TransitionValue>> transitionMap) {
     this.stateSet = stateSet;
     this.inputAlphabet = inputAlphabet;
@@ -38,6 +54,12 @@ public class StackAutomaton {
     this.transitionMap = transitionMap;
   }
 
+  /**
+   * Executes the automaton on the given input string.
+   *
+   * @param inputString input string (no separators)
+   * @return {@code true} if the string is accepted, {@code false} otherwise
+   */
   public boolean run(String inputString) {
     trace.clear();
     StackUtil<AutomatonSymbol> initialStack = new StackUtil<AutomatonSymbol>();
@@ -46,6 +68,11 @@ public class StackAutomaton {
     return dfsExecution(this.initialState, inputString, initialStack, 0);
   }
 
+  /**
+   * Retrieves the textual trace of the last execution.
+   *
+   * @return multi-line representation of the trace
+   */
   public String getTrace() {
     StringBuilder sb = new StringBuilder();
     for (String row : trace)
@@ -76,6 +103,18 @@ public class StackAutomaton {
     return sb.toString();
   }
 
+  /**
+   * DFS implementation that explores possible automaton executions.
+   *
+   * <p>The {@code limit} parameter is used to detect possible infinite
+   * loops; if {@code MAX_LIMIT} is reached an exception is thrown.</p>
+   *
+   * @param currentState current state
+   * @param currentInputString remaining input suffix
+   * @param currentStack current stack
+   * @param limit counter used for loop detection
+   * @return {@code true} if some branch leads to acceptance
+   */
   private boolean dfsExecution(State currentState, String currentInputString, StackUtil<AutomatonSymbol> currentStack, int limit) {
     if (limit >= MAX_LIMIT) throw new IllegalStateException("possible loop detected in automaton traversal");
     if (currentStack.empty() && !currentInputString.isEmpty()) {
